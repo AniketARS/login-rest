@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login_interactive/widgets/login.dart';
+import 'package:login_interactive/widgets/register.dart';
 import 'package:login_interactive/widgets/title_main.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -8,6 +9,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  PageController _controller = PageController(
+    keepPage: false,
+    initialPage: 0,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +35,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   prefix: Icons.chevron_right,
                   bgColor: 'white',
                 ),
-                Login(),
+                Expanded(
+                  child: PageView(
+                    controller: _controller,
+                    children: [
+                      Align(
+                          alignment: Alignment.center,
+                          child: Login(_controller)),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Register(_controller),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],

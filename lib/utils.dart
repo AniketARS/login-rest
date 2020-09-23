@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+ValueNotifier logged_in = ValueNotifier(false);
+
 SharedPreferences appState;
 
 Future<SharedPreferences> getAppState() async {
@@ -48,4 +50,47 @@ Future<http.Response> register(String email, String pass) async {
     ),
   );
   return response;
+}
+
+class UserList {
+  final int id;
+  final String email;
+  final String firstName;
+  final String lastName;
+  final String avatar;
+  static int page;
+  static int perPage;
+  static int total;
+  static int totalPages;
+
+  UserList({this.id, this.email, this.firstName, this.lastName, this.avatar});
+
+  factory UserList.fromJson(Map<String, dynamic> json) {
+    return UserList(
+        id: json['id'],
+        email: json['email'],
+        firstName: json['first_name'],
+        lastName: json['last_name'],
+        avatar: json['avatar']);
+  }
+}
+
+Future<List<UserList>> fetchUsers(int i) async {
+  final http.Response response =
+      await http.get('https://reqres.in/api/users?page=' + i.toString());
+
+  if (response.statusCode == 200) {
+    List<UserList> users = [];
+    var data = json.decode(response.body);
+    UserList.page = data['page'];
+    UserList.perPage = data['per_page'];
+    UserList.total = data['total'];
+    UserList.totalPages = data['total_pages'];
+    for (var v in data['data']) {
+      users.add(UserList.fromJson(v));
+    }
+    return users;
+  } else {
+    throw Exception('Something went wrong');
+  }
 }

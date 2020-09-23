@@ -38,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Expanded(
                   child: PageView(
                     controller: _controller,
+                    physics: NeverScrollableScrollPhysics(),
                     children: [
                       Align(
                           alignment: Alignment.center,

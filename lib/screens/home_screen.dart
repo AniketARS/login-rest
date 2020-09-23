@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:login_interactive/widgets/no_user_found.dart';
 import 'package:login_interactive/widgets/title_main.dart';
-import 'package:path/path.dart';
+import 'package:login_interactive/widgets/user_lists.dart';
 import '../utils.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    logged_in = ValueNotifier(false);
   }
 
   @override
@@ -25,18 +25,36 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               appState = snapshot.data;
-              if (!(appState.getBool('logged_in') ?? false)) {
-                return Column(
-                  children: [
-                    TitleMain(
-                      title: 'Hello, There',
-                      isPrefix: false,
-                      bgColor: 'pink',
-                    ),
-                    NoUserFound(),
-                  ],
-                );
-              }
+              bool doesLogged = appState.getBool('logged_in') ?? false;
+              return ValueListenableBuilder(
+                valueListenable: logged_in,
+                builder: (context, value, child) {
+                  if (value || doesLogged) {
+                    return Column(
+                      children: [
+                        TitleMain(
+                          title:
+                              'Hello, ' + appState.getString('name') ?? 'There',
+                          isPrefix: false,
+                          bgColor: 'pink',
+                        ),
+                        UserLists(),
+                      ],
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        TitleMain(
+                          title: 'Hello, There ',
+                          isPrefix: false,
+                          bgColor: 'pink',
+                        ),
+                        NoUserFound(),
+                      ],
+                    );
+                  }
+                },
+              );
             }
             if (snapshot.hasError) {
               return Center(

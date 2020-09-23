@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,12 +51,18 @@ class _RegisterState extends State<Register> {
   }
 
   _validateAndRegister() {
+    setState(() {
+      _showProcess = true;
+    });
     var name = _name.value.text;
     var job = _job.value.text;
     var pass = _passwordField.value.text;
 
     register('eve.holt@reqres.in', pass).then((value) {
       if (value.statusCode == 200) {
+        appState.setString('name', name);
+        appState.setString('job', job);
+        appState.setString('email', 'eve.holt@reqres.in');
         showSnackBar(context, 'Register Successfully');
       }
     });
@@ -90,6 +96,18 @@ class _RegisterState extends State<Register> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  InkWell(
+                    onTap: () {
+                      widget.controller.animateToPage(0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut);
+                    },
+                    child: Icon(
+                      Icons.chevron_left,
+                      size: 35,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                   Text(
                     'Register!',
                     style: TextStyle(

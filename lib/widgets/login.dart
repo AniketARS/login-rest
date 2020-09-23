@@ -21,7 +21,6 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
     _emailField = TextEditingController();
-
     _passwordField = TextEditingController();
   }
 
@@ -35,6 +34,7 @@ class _LoginState extends State<Login> {
   var _formKey = GlobalKey<FormState>();
 
   _validateAndLogin() {
+    logged_in.value = !logged_in.value;
     var email = _emailField.value.text;
     var pass = _passwordField.value.text;
 
@@ -52,6 +52,10 @@ class _LoginState extends State<Login> {
           _showProcess = false;
         });
         if (res.statusCode == 200) {
+          appState.setBool('logged_in', true);
+          logged_in.value = true;
+          appState.setString('email', email);
+          appState.setString('token', json.decode(res.body)['token']);
           showSnackBar(context, 'Logged in successfully');
         } else if (res.statusCode == 400) {
           showSnackBar(context, json.decode(res.body)['error']);

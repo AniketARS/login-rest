@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-ValueNotifier logged_in = ValueNotifier(false);
+ValueNotifier loggedIn = ValueNotifier(false);
+ValueNotifier currentPage = ValueNotifier(1);
 
 SharedPreferences appState;
 

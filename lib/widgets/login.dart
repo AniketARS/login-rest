@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
   var _formKey = GlobalKey<FormState>();
 
   _validateAndLogin() {
-    logged_in.value = !logged_in.value;
+    loggedIn.value = !loggedIn.value;
     var email = _emailField.value.text;
     var pass = _passwordField.value.text;
 
@@ -53,7 +53,7 @@ class _LoginState extends State<Login> {
         });
         if (res.statusCode == 200) {
           appState.setBool('logged_in', true);
-          logged_in.value = true;
+          loggedIn.value = true;
           appState.setString('email', email);
           appState.setString('token', json.decode(res.body)['token']);
           showSnackBar(context, 'Logged in successfully');

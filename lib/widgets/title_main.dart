@@ -52,34 +52,6 @@ class TitleMain extends StatelessWidget {
               ),
             ],
           ),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              alignment: Alignment.center,
-              height: 45,
-              width: 45,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: bgColor == 'pink'
-                    ? Theme.of(context).primaryColor.withOpacity(0.3)
-                    : Colors.white.withOpacity(0.3),
-              ),
-              child: Container(
-                width: 35,
-                height: 35,
-                alignment: Alignment.bottomCenter,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey[100],
-                ),
-                child: SvgPicture.asset(
-                  'assets/icons/user.svg',
-                  width: 30,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

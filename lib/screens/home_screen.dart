@@ -13,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    logged_in = ValueNotifier(false);
+    loggedIn = ValueNotifier(false);
   }
 
   @override
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
               appState = snapshot.data;
               bool doesLogged = appState.getBool('logged_in') ?? false;
               return ValueListenableBuilder(
-                valueListenable: logged_in,
+                valueListenable: loggedIn,
                 builder: (context, value, child) {
                   if (value || doesLogged) {
                     return Column(

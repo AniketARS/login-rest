@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:login_interactive/utils.dart';
+
+import '../utils.dart';
 
 class UserPlaceholder extends StatefulWidget {
   final String name;
@@ -13,16 +15,9 @@ class UserPlaceholder extends StatefulWidget {
 }
 
 class _UserPlaceholderState extends State<UserPlaceholder> {
-  var _image = null;
-
   @override
   void initState() {
     super.initState();
-    try {
-      _image = Image.network(widget.avatar);
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
   }
 
   @override
@@ -45,50 +40,65 @@ class _UserPlaceholderState extends State<UserPlaceholder> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey[300],
+          Expanded(
+            child: Row(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey[300],
+                  ),
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: widget.avatar,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                  ),
                 ),
-                child: ClipOval(child: _image),
-              ),
-              SizedBox(width: 20),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.name,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w800,
-                      color: Colors.grey[700],
-                    ),
+                SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.name,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w800,
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      Text(
+                        widget.email,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w800,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    widget.email,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Quicksand',
-                      fontWeight: FontWeight.w800,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-          InkWell(
-            onTap: () {},
-            child: Icon(
-              Icons.add,
-              size: 28,
-              color: Theme.of(context).primaryColor,
+          Container(
+            margin: EdgeInsets.only(left: 5),
+            child: InkWell(
+              onTap: () {},
+              child: Icon(
+                Icons.add,
+                size: 28,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
         ],

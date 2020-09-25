@@ -95,3 +95,17 @@ Future<List<UserList>> fetchUsers(int i) async {
     throw Exception('Something went wrong');
   }
 }
+
+void addUserToFriend(BuildContext context, int index) {
+  var currentFriends = appState.getStringList('friends') ?? <String>[];
+  currentFriends.add(index.toString());
+  appState.setStringList('friends', currentFriends).then((value) {
+    showSnackBar(context, "Added to friends");
+  });
+}
+
+void logOut(BuildContext context) {
+  appState.setBool('logged_in', false);
+  loggedIn.value = false;
+  showSnackBar(context, 'Logged Out Successfully');
+}

@@ -16,6 +16,10 @@ class _HomeScreenState extends State<HomeScreen> {
     loggedIn = ValueNotifier(false);
   }
 
+  void refresh() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,10 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Column(
                       children: [
                         TitleMain(
-                          title:
-                              'Hello, ' + appState.getString('name') ?? 'There',
+                          title: 'Hello, ' +
+                              (appState.getString('name') ?? 'There'),
                           isPrefix: false,
                           bgColor: 'pink',
+                          logOutRef: refresh,
                         ),
                         UserLists(),
                       ],

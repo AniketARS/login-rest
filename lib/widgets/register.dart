@@ -60,6 +60,9 @@ class _RegisterState extends State<Register> {
 
     register('eve.holt@reqres.in', pass).then((value) {
       if (value.statusCode == 200) {
+        setState(() {
+          _showProcess = false;
+        });
         appState.setString('name', name);
         appState.setString('job', job);
         appState.setString('email', 'eve.holt@reqres.in');

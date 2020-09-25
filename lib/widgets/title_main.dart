@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'dart:math' as math;
+
+import '../utils.dart';
 
 class TitleMain extends StatelessWidget {
   final String title;
   final IconData prefix;
-  bool isPrefix;
+  final bool isPrefix;
   final String bgColor;
-  TitleMain({this.title, this.isPrefix, this.prefix, this.bgColor});
+  Function() logOutRef;
+  TitleMain(
+      {this.title, this.isPrefix, this.prefix, this.bgColor, this.logOutRef});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -51,6 +54,26 @@ class TitleMain extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          ValueListenableBuilder(
+            valueListenable: loggedIn,
+            builder: (context, value, child) {
+              bool didLogged = appState.getBool('logged_in') ?? false;
+              if (value || didLogged)
+                return InkWell(
+                  onTap: () {
+                    logOut(context);
+                    logOutRef();
+                  },
+                  child: Icon(
+                    Icons.exit_to_app,
+                    size: 28,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                );
+              else
+                return SizedBox(width: 0);
+            },
           ),
         ],
       ),

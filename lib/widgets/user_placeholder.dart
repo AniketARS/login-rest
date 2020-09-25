@@ -4,17 +4,23 @@ import 'package:flutter/material.dart';
 import '../utils.dart';
 
 class UserPlaceholder extends StatefulWidget {
+  final int index;
   final String name;
   final String email;
   final String avatar;
+  final bool isFriend;
 
-  UserPlaceholder({this.name, this.email, this.avatar});
+  UserPlaceholder(
+      {this.index, this.name, this.email, this.avatar, this.isFriend});
 
   @override
-  _UserPlaceholderState createState() => _UserPlaceholderState();
+  _UserPlaceholderState createState() => _UserPlaceholderState(this.isFriend);
 }
 
 class _UserPlaceholderState extends State<UserPlaceholder> {
+  bool _isFriend;
+  _UserPlaceholderState(this._isFriend);
+
   @override
   void initState() {
     super.initState();
@@ -93,12 +99,25 @@ class _UserPlaceholderState extends State<UserPlaceholder> {
           Container(
             margin: EdgeInsets.only(left: 5),
             child: InkWell(
-              onTap: () {},
-              child: Icon(
-                Icons.add,
-                size: 28,
-                color: Theme.of(context).primaryColor,
-              ),
+              onTap: () {
+                if (!_isFriend) {
+                  addUserToFriend(context, widget.index);
+                  setState(() {
+                    _isFriend = true;
+                  });
+                }
+              },
+              child: !_isFriend
+                  ? Icon(
+                      Icons.add,
+                      size: 28,
+                      color: Theme.of(context).primaryColor,
+                    )
+                  : Icon(
+                      Icons.done,
+                      size: 28,
+                      color: Colors.green,
+                    ),
             ),
           ),
         ],

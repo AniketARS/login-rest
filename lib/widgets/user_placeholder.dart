@@ -10,32 +10,38 @@ class UserPlaceholder extends StatefulWidget {
   final String avatar;
   final bool isFriend;
 
-  UserPlaceholder(
-      {this.index, this.name, this.email, this.avatar, this.isFriend});
+  const UserPlaceholder({
+    super.key,
+    required this.index,
+    required this.name,
+    required this.email,
+    required this.avatar,
+    required this.isFriend,
+  });
 
   @override
-  _UserPlaceholderState createState() => _UserPlaceholderState(this.isFriend);
+  State<UserPlaceholder> createState() => _UserPlaceholderState();
 }
 
 class _UserPlaceholderState extends State<UserPlaceholder> {
-  bool _isFriend;
-  _UserPlaceholderState(this._isFriend);
+  late bool _isFriend;
 
   @override
   void initState() {
     super.initState();
+    _isFriend = widget.isFriend;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.1,
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             blurRadius: 5,
             offset: Offset(0, 2),
@@ -59,13 +65,12 @@ class _UserPlaceholderState extends State<UserPlaceholder> {
                   child: ClipOval(
                     child: CachedNetworkImage(
                       imageUrl: widget.avatar,
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      placeholder: (context, url) => const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                     ),
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -97,7 +102,7 @@ class _UserPlaceholderState extends State<UserPlaceholder> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 5),
+            margin: const EdgeInsets.only(left: 5),
             child: InkWell(
               onTap: () {
                 if (!_isFriend) {
@@ -113,7 +118,7 @@ class _UserPlaceholderState extends State<UserPlaceholder> {
                       size: 28,
                       color: Theme.of(context).primaryColor,
                     )
-                  : Icon(
+                  : const Icon(
                       Icons.done,
                       size: 28,
                       color: Colors.green,

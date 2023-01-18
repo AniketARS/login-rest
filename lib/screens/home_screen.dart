@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:login_interactive/widgets/no_user_found.dart';
 import 'package:login_interactive/widgets/title_main.dart';
 import 'package:login_interactive/widgets/user_lists.dart';
+
 import '../utils.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -29,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               appState = snapshot.data;
-              bool doesLogged = appState.getBool('logged_in') ?? false;
+              bool doesLogged = appState?.getBool('logged_in') ?? false;
               return ValueListenableBuilder(
                 valueListenable: loggedIn,
                 builder: (context, value, child) {
@@ -37,22 +40,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Column(
                       children: [
                         TitleMain(
-                          title: 'Hello, ' +
-                              (appState.getString('name') ?? 'There'),
+                          title: 'Hello, ${appState?.getString('name') ?? 'There'}',
                           isPrefix: false,
                           bgColor: 'pink',
                           logOutRef: refresh,
+                          prefix: Icons.menu,
                         ),
-                        UserLists(),
+                        const UserLists(),
                       ],
                     );
                   } else {
                     return Column(
                       children: [
-                        TitleMain(
+                        const TitleMain(
                           title: 'Hello, There ',
                           isPrefix: false,
                           bgColor: 'pink',
+                          logOutRef: null,
+                          prefix: null,
                         ),
                         NoUserFound(),
                       ],
@@ -70,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: FontWeight.w500,
                       color: Colors.grey[500],
                     ),
-                    children: <TextSpan>[
+                    children: const <TextSpan>[
                       TextSpan(text: 'Something went wrong..'),
                       TextSpan(
                         text: '\n1.Try restarting app',
@@ -84,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             }
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),

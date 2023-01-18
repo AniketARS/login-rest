@@ -1,21 +1,27 @@
-import 'package:flutter/material.dart';
-
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 
 import '../utils.dart';
 
 class TitleMain extends StatelessWidget {
   final String title;
-  final IconData prefix;
+  final IconData? prefix;
   final bool isPrefix;
   final String bgColor;
-  Function() logOutRef;
-  TitleMain(
-      {this.title, this.isPrefix, this.prefix, this.bgColor, this.logOutRef});
+  final Function()? logOutRef;
+  const TitleMain({
+    super.key,
+    required this.title,
+    required this.isPrefix,
+    required this.prefix,
+    required this.bgColor,
+    required this.logOutRef,
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,25 +38,22 @@ class TitleMain extends StatelessWidget {
                         child: Icon(
                           prefix,
                           size: 35,
-                          color: bgColor == 'pink'
-                              ? Colors.grey[700]
-                              : Colors.grey[200],
+                          color: bgColor == 'pink' ? Colors.grey[700] : Colors.grey[200],
                         ),
                       ),
                     )
-                  : SizedBox(
+                  : const SizedBox(
                       width: 0,
                     ),
               SizedBox(width: isPrefix ? 5 : 0),
               Text(
-                this.title,
+                title,
                 style: TextStyle(
                   fontFamily: 'Quicksand',
                   fontSize: 28,
                   height: 1.1,
                   fontWeight: FontWeight.w600,
-                  color:
-                      bgColor == 'pink' ? Colors.grey[700] : Colors.grey[200],
+                  color: bgColor == 'pink' ? Colors.grey[700] : Colors.grey[200],
                 ),
               ),
             ],
@@ -58,12 +61,12 @@ class TitleMain extends StatelessWidget {
           ValueListenableBuilder(
             valueListenable: loggedIn,
             builder: (context, value, child) {
-              bool didLogged = appState.getBool('logged_in') ?? false;
-              if (value || didLogged)
+              bool didLogged = appState?.getBool('logged_in') ?? false;
+              if (value || didLogged) {
                 return InkWell(
                   onTap: () {
                     logOut(context);
-                    logOutRef();
+                    logOutRef!();
                   },
                   child: Icon(
                     Icons.exit_to_app,
@@ -71,8 +74,9 @@ class TitleMain extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                   ),
                 );
-              else
-                return SizedBox(width: 0);
+              } else {
+                return const SizedBox(width: 0);
+              }
             },
           ),
         ],

@@ -10,8 +10,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Login Now",
-      theme: ThemeData(primaryColor: Color.fromRGBO(177, 30, 49, 1)),
-      home: HomeScreen(),
+      theme: ThemeData(primaryColor: const Color.fromRGBO(177, 30, 49, 1)),
+      home: const HomeScreen(),
     );
   }
 }

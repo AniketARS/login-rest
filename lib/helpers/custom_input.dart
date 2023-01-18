@@ -1,40 +1,42 @@
 import 'package:flutter/material.dart';
 
 class CustomInput extends StatefulWidget {
-  final IconData icondata;
+  final IconData iconData;
   final String hint;
   final TextEditingController controller;
-  bool isPassword;
-  String pass;
+  final bool isPassword;
+  final String pass;
 
-  CustomInput(this.icondata, this.hint, this.controller,
-      {this.isPassword: false, this.pass: 'notUsed'});
+  const CustomInput(this.iconData, this.hint, this.controller,
+      {super.key, this.isPassword = false, this.pass = 'notUsed'});
 
   @override
-  _CustomInputState createState() => _CustomInputState();
+  State<CustomInput> createState() => _CustomInputState();
 }
 
 class _CustomInputState extends State<CustomInput> {
-  Color _borderColor = Colors.grey[400];
+  Color? _borderColor;
 
   @override
   void initState() {
     super.initState();
-    if (widget.pass != 'notUsed')
+    if (widget.pass != 'notUsed') {
       widget.controller.addListener(() {
-        if (widget.controller.value.text == '')
+        if (widget.controller.value.text == '') {
           setState(() {
             _borderColor = Colors.grey[400];
           });
-        else if (widget.controller.value.text != widget.pass)
+        } else if (widget.controller.value.text != widget.pass) {
           setState(() {
             _borderColor = Colors.red;
           });
-        else if (widget.controller.value.text == widget.pass)
+        } else if (widget.controller.value.text == widget.pass) {
           setState(() {
             _borderColor = Colors.green;
           });
+        }
       });
+    }
   }
 
   @override
@@ -43,19 +45,19 @@ class _CustomInputState extends State<CustomInput> {
       height: 50,
       decoration: BoxDecoration(
         border: Border.all(
-          color: widget.pass == 'notUsed' ? Colors.grey[400] : _borderColor,
+          color: widget.pass == 'notUsed' ? Colors.grey[400] ?? Colors.red : _borderColor ?? Colors.red,
         ),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         children: [
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Icon(
-            widget.icondata,
+            widget.iconData,
             size: 24,
             color: Theme.of(context).primaryColor.withOpacity(0.7),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: TextFormField(
               controller: widget.controller,

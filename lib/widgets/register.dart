@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:login_interactive/helpers/custom_input.dart';
@@ -7,19 +5,19 @@ import 'package:login_interactive/utils.dart';
 
 class Register extends StatefulWidget {
   final PageController controller;
-  Register(this.controller);
+  const Register(this.controller, {super.key});
   @override
-  _RegisterState createState() => _RegisterState();
+  State<Register> createState() => _RegisterState();
 }
 
 class _RegisterState extends State<Register> {
-  Key _formKey = GlobalKey<FormState>();
+  final Key _formKey = GlobalKey<FormState>();
   bool _showProcess = false;
 
-  TextEditingController _name;
-  TextEditingController _job;
-  TextEditingController _confirmPassword;
-  TextEditingController _passwordField;
+  late TextEditingController _name;
+  late TextEditingController _job;
+  late TextEditingController _confirmPassword;
+  late TextEditingController _passwordField;
 
   bool _generated = false;
 
@@ -29,12 +27,6 @@ class _RegisterState extends State<Register> {
     _name = TextEditingController();
     _job = TextEditingController();
     _confirmPassword = TextEditingController();
-    _confirmPassword.addListener(() {
-      _confirmPassword.buildTextSpan(
-          style: TextStyle(
-        color: Colors.red,
-      ));
-    });
     _passwordField = TextEditingController();
     _passwordField.addListener(() {
       setState(() {});
@@ -63,9 +55,9 @@ class _RegisterState extends State<Register> {
         setState(() {
           _showProcess = false;
         });
-        appState.setString('name', name);
-        appState.setString('job', job);
-        appState.setString('email', 'eve.holt@reqres.in');
+        appState?.setString('name', name);
+        appState?.setString('job', job);
+        appState?.setString('email', 'eve.holt@reqres.in');
         showSnackBar(context, 'Register Successfully');
       }
     });
@@ -73,16 +65,23 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+    _confirmPassword.addListener(() {
+      _confirmPassword.buildTextSpan(
+        style: const TextStyle(color: Colors.red),
+        context: context,
+        withComposing: false,
+      );
+    });
     return Container(
-      padding: EdgeInsets.all(30).subtract(
-        EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(30).subtract(
+        const EdgeInsets.only(bottom: 10),
       ),
       width: MediaQuery.of(context).size.width * 0.8,
-      height: MediaQuery.of(context).size.height * 0.6,
+      height: MediaQuery.of(context).size.height * 0.65,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             blurRadius: 3,
             offset: Offset(0, 2),
@@ -101,9 +100,8 @@ class _RegisterState extends State<Register> {
                 children: [
                   InkWell(
                     onTap: () {
-                      widget.controller.animateToPage(0,
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut);
+                      widget.controller
+                          .animateToPage(0, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
                     },
                     child: Icon(
                       Icons.chevron_left,
@@ -125,24 +123,22 @@ class _RegisterState extends State<Register> {
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(
-                            valueColor: new AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor),
+                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
                           ),
                         )
-                      : SizedBox(width: 0),
+                      : const SizedBox(width: 0),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               CustomInput(Icons.perm_identity, 'Name', _name),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               CustomInput(Icons.title, 'Job', _job),
-              SizedBox(height: 10),
-              CustomInput(Icons.security, 'Password', _passwordField,
-                  isPassword: true),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
+              CustomInput(Icons.security, 'Password', _passwordField, isPassword: true),
+              const SizedBox(height: 10),
               CustomInput(Icons.security, 'Confirm Password', _confirmPassword,
                   isPassword: true, pass: _passwordField.value.text),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
                 height: 50,
                 alignment: Alignment.center,
@@ -150,26 +146,22 @@ class _RegisterState extends State<Register> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      !_generated
-                          ? 'Generate your email'
-                          : 'eve.holt@reqres.in',
+                      !_generated ? 'Generate your email' : 'eve.holt@reqres.in',
                       style: TextStyle(
                         color: _generated ? Colors.grey[600] : Colors.grey[400],
                         fontSize: _generated ? 16 : 14,
                         fontFamily: 'Quicksand',
-                        fontWeight:
-                            _generated ? FontWeight.w800 : FontWeight.w600,
+                        fontWeight: _generated ? FontWeight.w800 : FontWeight.w600,
                       ),
                     ),
                     InkWell(
                       onTap: () {
-                        if (!_generated)
+                        if (!_generated) {
                           setState(() {
                             _generated = true;
                           });
-                        else {
-                          Clipboard.setData(
-                              ClipboardData(text: 'eve.holt@reqres.in'));
+                        } else {
+                          Clipboard.setData(const ClipboardData(text: 'eve.holt@reqres.in'));
                           showSnackBar(context, 'Copied');
                         }
                       },
@@ -186,7 +178,7 @@ class _RegisterState extends State<Register> {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               InkWell(
                 onTap: () {
                   _validateAndRegister();

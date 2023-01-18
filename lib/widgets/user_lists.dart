@@ -1,24 +1,27 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:login_interactive/utils.dart';
 import 'package:login_interactive/widgets/pager.dart';
 import 'package:login_interactive/widgets/user_placeholder.dart';
 
 class UserLists extends StatefulWidget {
+  const UserLists({super.key});
+
   @override
-  _UserListsState createState() => _UserListsState();
+  State<UserLists> createState() => _UserListsState();
 }
 
 class _UserListsState extends State<UserLists> {
-  Future<List<UserList>> future;
-  Widget mainWidget;
-  List<String> currentFriends;
+  late Future<List<UserList>> future;
+  late Widget mainWidget;
+  List<String> currentFriends = [];
 
   Widget _returnList(List<UserList> users) {
-    currentFriends = appState.getStringList('friends') ?? [];
+    currentFriends = appState?.getStringList('friends') ?? [];
     return ListView(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -31,7 +34,7 @@ class _UserListsState extends State<UserLists> {
                   color: Colors.grey[700],
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Container(
                 width: 5,
                 height: 5,
@@ -40,9 +43,9 @@ class _UserListsState extends State<UserLists> {
                   color: Colors.grey[400],
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(
-                currentFriends.length.toString() + ' friends',
+                '${currentFriends.length} friends',
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'Quicksand',
@@ -56,7 +59,7 @@ class _UserListsState extends State<UserLists> {
         for (var user in users)
           UserPlaceholder(
             index: user.id,
-            name: user.firstName + ' ' + user.lastName,
+            name: '${user.firstName} ${user.lastName}',
             email: user.email,
             avatar: user.avatar,
             isFriend: currentFriends.contains(user.id.toString()),
@@ -76,13 +79,13 @@ class _UserListsState extends State<UserLists> {
         mainWidget = _returnList(value);
       });
     });
-    mainWidget = Center(child: CircularProgressIndicator());
+    mainWidget = const Center(child: CircularProgressIndicator());
     super.initState();
   }
 
   void fetchPrev() {
     setState(() {
-      mainWidget = Center(child: CircularProgressIndicator());
+      mainWidget = const Center(child: CircularProgressIndicator());
       fetchUsers(UserList.page - 1).then((value) {
         setState(() {
           mainWidget = _returnList(value);
@@ -93,7 +96,7 @@ class _UserListsState extends State<UserLists> {
 
   void fetchNext() {
     setState(() {
-      mainWidget = Center(child: CircularProgressIndicator());
+      mainWidget = const Center(child: CircularProgressIndicator());
       fetchUsers(UserList.page + 1).then((value) {
         setState(() {
           mainWidget = _returnList(value);
@@ -103,7 +106,9 @@ class _UserListsState extends State<UserLists> {
   }
 
   printSomething() {
-    print('hello');
+    if (kDebugMode) {
+      print('hello');
+    }
   }
 
   @override

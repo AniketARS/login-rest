@@ -6,16 +6,16 @@ import 'package:login_interactive/utils.dart';
 
 class Login extends StatefulWidget {
   final PageController controller;
-  Login(this.controller);
+  const Login(this.controller, {super.key});
 
   @override
-  _LoginState createState() => _LoginState();
+  State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
   bool _showProcess = false;
-  TextEditingController _emailField;
-  TextEditingController _passwordField;
+  late TextEditingController _emailField;
+  late TextEditingController _passwordField;
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _LoginState extends State<Login> {
     _passwordField.dispose();
   }
 
-  var _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   _validateAndLogin() {
     loggedIn.value = !loggedIn.value;
@@ -52,10 +52,10 @@ class _LoginState extends State<Login> {
           _showProcess = false;
         });
         if (res.statusCode == 200) {
-          appState.setBool('logged_in', true);
+          appState?.setBool('logged_in', true);
           loggedIn.value = true;
-          appState.setString('email', email);
-          appState.setString('token', json.decode(res.body)['token']);
+          appState?.setString('email', email);
+          appState?.setString('token', json.decode(res.body)['token']);
           showSnackBar(context, 'Logged in successfully');
         } else if (res.statusCode == 400) {
           showSnackBar(context, json.decode(res.body)['error']);
@@ -69,15 +69,15 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(30).subtract(
-        EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(30).subtract(
+        const EdgeInsets.only(bottom: 10),
       ),
       width: MediaQuery.of(context).size.width * 0.8,
-      height: MediaQuery.of(context).size.height * 0.5,
+      height: MediaQuery.of(context).size.height * 0.52,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             blurRadius: 3,
             offset: Offset(0, 2),
@@ -87,113 +87,113 @@ class _LoginState extends State<Login> {
       ),
       child: Form(
         key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Hello!',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.w600,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Hello!',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontFamily: 'Quicksand',
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  _showProcess
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                          ),
+                        )
+                      : const SizedBox(width: 0),
+                ],
+              ),
+              const SizedBox(height: 20),
+              CustomInput(Icons.email, 'Email', _emailField),
+              const SizedBox(height: 10),
+              CustomInput(Icons.security, 'Password', _passwordField, isPassword: true),
+              const SizedBox(height: 20),
+              InkWell(
+                onTap: () {
+                  _validateAndLogin();
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
                     color: Theme.of(context).primaryColor,
                   ),
-                ),
-                _showProcess
-                    ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          valueColor: new AlwaysStoppedAnimation<Color>(
-                              Theme.of(context).primaryColor),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Log in',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.grey[100],
+                          fontWeight: FontWeight.w900,
                         ),
-                      )
-                    : SizedBox(width: 0),
-              ],
-            ),
-            SizedBox(height: 20),
-            CustomInput(Icons.email, 'Email', _emailField),
-            SizedBox(height: 10),
-            CustomInput(Icons.security, 'Password', _passwordField,
-                isPassword: true),
-            SizedBox(height: 20),
-            InkWell(
-              onTap: () {
-                _validateAndLogin();
-              },
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Theme.of(context).primaryColor,
+                      ),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Log in',
+              ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    height: 1,
+                    color: Colors.grey[300],
+                  ),
+                  Container(
+                    height: 30,
+                    width: 50,
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.symmetric(vertical: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Text(
+                      'OR',
                       style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey[100],
-                        fontWeight: FontWeight.w900,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[700],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  height: 1,
-                  color: Colors.grey[300],
-                ),
-                Container(
-                  height: 30,
-                  width: 50,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(30),
                   ),
+                ],
+              ),
+              InkWell(
+                onTap: () {
+                  widget.controller.animateToPage(
+                    1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: Align(
+                  alignment: Alignment.center,
                   child: Text(
-                    'OR',
+                    'REGISTER',
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[700],
+                      fontSize: 18,
+                      letterSpacing: 1.5,
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
-              ],
-            ),
-            InkWell(
-              onTap: () {
-                widget.controller.animateToPage(
-                  1,
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'REGISTER',
-                  style: TextStyle(
-                    fontSize: 18,
-                    letterSpacing: 1.5,
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

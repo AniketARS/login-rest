@@ -4,12 +4,14 @@ import 'package:login_interactive/widgets/register.dart';
 import 'package:login_interactive/widgets/title_main.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  PageController _controller = PageController(
+  final PageController _controller = PageController(
     keepPage: false,
     initialPage: 0,
   );
@@ -29,20 +31,19 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Column(
               children: [
-                TitleMain(
+                const TitleMain(
                   title: 'Please Login',
                   isPrefix: true,
                   prefix: Icons.chevron_right,
                   bgColor: 'white',
+                  logOutRef: null,
                 ),
                 Expanded(
                   child: PageView(
                     controller: _controller,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      Align(
-                          alignment: Alignment.center,
-                          child: Login(_controller)),
+                      Align(alignment: Alignment.center, child: Login(_controller)),
                       Align(
                         alignment: Alignment.center,
                         child: Register(_controller),

@@ -5,7 +5,7 @@ import '../utils.dart';
 class Pager extends StatelessWidget {
   final Function() prev;
   final Function() next;
-  Pager({this.prev, this.next});
+  const Pager({super.key, required this.prev, required this.next});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class PagerNavBtn extends StatelessWidget {
   final Function() func;
   final String type;
   final bool active;
-  PagerNavBtn({this.func, this.type, this.active});
+  const PagerNavBtn({super.key, required this.func, required this.type, required this.active});
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +47,15 @@ class PagerNavBtn extends StatelessWidget {
       },
       child: Row(
         children: [
-          this.type == 'prev'
+          type == 'prev'
               ? Icon(
                   Icons.chevron_left,
                   size: 20,
-                  color: active
-                      ? Theme.of(context).primaryColor
-                      : Colors.grey[400],
+                  color: active ? Theme.of(context).primaryColor : Colors.grey[400],
                 )
-              : SizedBox(width: 0),
+              : const SizedBox(width: 0),
           Text(
-            this.type == 'prev' ? 'Prev' : 'Next',
+            type == 'prev' ? 'Prev' : 'Next',
             style: TextStyle(
               fontSize: 16,
               fontFamily: 'Quicksand',
@@ -65,15 +63,13 @@ class PagerNavBtn extends StatelessWidget {
               color: active ? Theme.of(context).primaryColor : Colors.grey[400],
             ),
           ),
-          this.type == 'next'
+          type == 'next'
               ? Icon(
                   Icons.chevron_right,
                   size: 20,
-                  color: active
-                      ? Theme.of(context).primaryColor
-                      : Colors.grey[400],
+                  color: active ? Theme.of(context).primaryColor : Colors.grey[400],
                 )
-              : SizedBox(width: 0),
+              : const SizedBox(width: 0),
         ],
       ),
     );

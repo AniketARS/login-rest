@@ -2,28 +2,28 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 ValueNotifier loggedIn = ValueNotifier(false);
 ValueNotifier currentPage = ValueNotifier(1);
 
-SharedPreferences appState;
+SharedPreferences? appState;
 
 Future<SharedPreferences> getAppState() async {
-  sleep(Duration(microseconds: 2000));
+  sleep(const Duration(microseconds: 2000));
   return await SharedPreferences.getInstance();
 }
 
 void showSnackBar(BuildContext context, String title) {
-  Scaffold.of(context).showSnackBar(SnackBar(
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(title),
   ));
 }
 
 Future<http.Response> login(String email, String pass) async {
   final http.Response response = await http.post(
-    'https://reqres.in/api/login',
+    Uri.parse('https://reqres.in/api/login'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -39,7 +39,7 @@ Future<http.Response> login(String email, String pass) async {
 
 Future<http.Response> register(String email, String pass) async {
   final http.Response response = await http.post(
-    'https://reqres.in/api/login',
+    Uri.parse('https://reqres.in/api/login'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -59,12 +59,18 @@ class UserList {
   final String firstName;
   final String lastName;
   final String avatar;
-  static int page;
-  static int perPage;
-  static int total;
-  static int totalPages;
+  static int page = 0;
+  static int perPage = 0;
+  static int total = 0;
+  static int totalPages = 0;
 
-  UserList({this.id, this.email, this.firstName, this.lastName, this.avatar});
+  UserList({
+    required this.id,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.avatar,
+  });
 
   factory UserList.fromJson(Map<String, dynamic> json) {
     return UserList(
@@ -77,8 +83,7 @@ class UserList {
 }
 
 Future<List<UserList>> fetchUsers(int i) async {
-  final http.Response response =
-      await http.get('https://reqres.in/api/users?page=' + i.toString());
+  final http.Response response = await http.get(Uri.parse('https://reqres.in/api/users?page=$i'));
 
   if (response.statusCode == 200) {
     List<UserList> users = [];
@@ -97,15 +102,15 @@ Future<List<UserList>> fetchUsers(int i) async {
 }
 
 void addUserToFriend(BuildContext context, int index) {
-  var currentFriends = appState.getStringList('friends') ?? <String>[];
+  var currentFriends = appState?.getStringList('friends') ?? <String>[];
   currentFriends.add(index.toString());
-  appState.setStringList('friends', currentFriends).then((value) {
+  appState?.setStringList('friends', currentFriends).then((value) {
     showSnackBar(context, "Added to friends");
   });
 }
 
 void logOut(BuildContext context) {
-  appState.setBool('logged_in', false);
+  appState?.setBool('logged_in', false);
   loggedIn.value = false;
   showSnackBar(context, 'Logged Out Successfully');
 }
